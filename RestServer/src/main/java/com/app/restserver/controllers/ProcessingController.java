@@ -1,7 +1,9 @@
 package com.app.restserver.controllers;
 
 import com.app.restserver.dtos.Job;
+import com.app.restserver.services.JobSenderService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ProcessingController {
+    private final JobSenderService jobSenderService;
+
+    @Autowired
+    public ProcessingController(JobSenderService jobSenderService) {
+        this.jobSenderService = jobSenderService;
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "jobs")
     public ResponseEntity<?> handleJobRequest(@RequestBody @Valid Job job) {
-        System.out.println(job);
+        jobSenderService.send(job);
         return ResponseEntity.accepted().build();
     }
 }

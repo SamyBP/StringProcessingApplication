@@ -1,6 +1,6 @@
 package com.app.restserver.dtos;
 
-public enum OperationType {
+public enum TaskType {
     SUBSTRING,
     UPPER,
     LOWER,
