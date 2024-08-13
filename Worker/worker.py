@@ -31,11 +31,11 @@ class Worker:
         channel = self.connection.channel()
         channel.queue_declare(queue=self.queue_name, durable=True)
         channel.basic_qos(prefetch_count=1)
-        channel.basic_consume(queue=self.queue_name, on_message_callback=self.process_message)
+        channel.basic_consume(queue=self.queue_name, on_message_callback=self.__process_message)
         channel.start_consuming()
 
     @staticmethod
-    def process_message(ch, method, properties, body):
+    def __process_message(ch, method, properties, body):
         job_data = json.loads(body.decode())
         print(f"Received job {job_data}")
 
@@ -50,7 +50,7 @@ class Worker:
             response.result = task_executor.execute()
             response.is_success = True
         except Exception as e:
-            response.result = repr(e)
+            response.result = str(e)
             response.is_success = False
 
         print(response.__dict__)

@@ -1,1 +1,0 @@
-python -m unittest .app\services\test_task_executor.py

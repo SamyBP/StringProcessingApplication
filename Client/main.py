@@ -28,6 +28,7 @@ class Task(BaseModel):
 
 class TriggerOperation(BaseModel):
     id: str
+    input: str
     callback: str
     tasks: List[Task]
 
