@@ -1,4 +1,7 @@
-from app.models.tasks import SubstringTask, LowerTask, UpperTask, TrimTask
+from app.models.substring_task import SubstringTask
+from app.models.lower_task import LowerTask
+from app.models.upper_task import UpperTask
+from app.models.trim_task import TrimTask
 
 import unittest
 

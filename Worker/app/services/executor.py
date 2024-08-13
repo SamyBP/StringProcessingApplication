@@ -1,5 +1,5 @@
 from typing import List
-from app.models.tasks import Task
+from app.models.task import Task
 
 
 class TaskExecutor:
