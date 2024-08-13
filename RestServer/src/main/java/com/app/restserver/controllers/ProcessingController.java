@@ -1,6 +1,7 @@
 package com.app.restserver.controllers;
 
 import com.app.restserver.dtos.Job;
+import com.app.restserver.dtos.TargetResponse;
 import com.app.restserver.services.JobSenderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,11 @@ public class ProcessingController {
     public ResponseEntity<?> handleJobRequest(@RequestBody @Valid Job job) {
         jobSenderService.send(job);
         return ResponseEntity.accepted().build();
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "callback")
+    public ResponseEntity<?> testCallback(@RequestBody TargetResponse targetResponse) {
+        System.out.printf("Received response:%s%n", targetResponse);
+        return ResponseEntity.ok().build();
     }
 }

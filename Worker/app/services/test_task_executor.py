@@ -1,6 +1,8 @@
 import unittest
 
-from app.models.tasks import SubstringTask, TrimTask, LowerTask
+from app.models.substring_task import SubstringTask
+from app.models.trim_task import TrimTask
+from app.models.lower_task import LowerTask
 from app.services.executor import TaskExecutor
 
 
