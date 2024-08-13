@@ -18,5 +18,6 @@ RestServer/.sts4-cache
 
 #Worker
 Worker/.idea
+Worker/.env
 
 .idea
