@@ -1,0 +1,30 @@
+
+
+services:
+  client1:
+    build: ./Client
+    image: "client"
+    container_name: "client1"
+    ports:
+      - "8002:8000"
+    environment:
+      - STRING_PROCESSING_ENDPOINT_APP=http://client2:8000/test_handle_execution
+
+    networks:
+      - app
+
+  client2:
+    build: ./Client
+    image: "client"
+    container_name: "client2"
+    ports:
+      - "8003:8000"
+    environment:
+      - STRING_PROCESSING_ENDPOINT_APP=http://client1:8000/test_handle_execution
+
+    networks:
+      - app
+
+
+networks:
+  app:
