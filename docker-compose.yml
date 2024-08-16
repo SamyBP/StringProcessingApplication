@@ -73,25 +73,6 @@ services:
     networks:
       - app
 
-  server2:
-    build:
-      context: ./RestServer
-      target: server
-    image: "rest.server"
-    container_name: "server2"
-    ports:
-      - "8081:8080"
-    environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_VIRTUAL-HOST=app.vhost
-      - SPRING_RABBITMQ_USERNAME=app
-      - SPRING_RABBITMQ_PASSWORD=app
-      - SPRING_RABBITMQ_PORT=5672
-    volumes:
-      - server-artifact:/target
-    networks:
-      - app
-
 volumes:
   server-artifact:
 
