@@ -1,11 +1,13 @@
 # Setup 
+1. Replace the values from the [application.properties](src/main/resources/application.properties) with the RabbitMQ credentials.
+**Note**:Same credentials used in the worker
 
-1. Build. Requires jdk-21
+2. Build. Requires jdk-21
     
          mvnw package
 
 
-2. Start the server. Starts on port 8080
+3. Start the server. Starts on port 8080
 
          start.server.bat
 
