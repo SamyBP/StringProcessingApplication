@@ -20,6 +20,11 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    environment:
+      - RABBITMQ_USER=app
+      - RABBITMQ_PASSWORD=app
+      - RABBITMQ_PID_FILE=/var/lib/rabbitmq/mnesia/rabbitmq
+      - RABBITMQ_VHOST=app.vhost
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 30s
@@ -42,22 +47,10 @@ services:
     networks:
       - app
 
-
-  artifact:
-    build:
-     context: ./RestServer
-     target: artifact
-    image: "artifact"
-    container_name: "artifact"
-    volumes:
-      - server-artifact:/ArtifactBuilder/target
-    networks:
-      - app
-
   server:
     build:
       context: ./RestServer
-      target: server
+      dockerfile: Dockerfile
     image: "rest.server"
     container_name: "server"
     ports:
@@ -68,13 +61,8 @@ services:
       - SPRING_RABBITMQ_USERNAME=app
       - SPRING_RABBITMQ_PASSWORD=app
       - SPRING_RABBITMQ_PORT=5672
-    volumes:
-      - server-artifact:/target
     networks:
       - app
-
-volumes:
-  server-artifact:
 
 networks:
   app:

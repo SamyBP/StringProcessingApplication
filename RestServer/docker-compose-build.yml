@@ -1,0 +1,11 @@
+services:
+  artefact:
+    build:
+      context: .
+      dockerfile: artefact.Dockerfile
+    image: "artifact"
+    container_name: "artifact"
+    volumes:
+      - ./target:/ArtefactBuilder/target
+
+
