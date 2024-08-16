@@ -1,6 +1,8 @@
 from typing import List
 from app.models.task import Task
 
+import time
+
 
 class TaskExecutor:
 
@@ -11,6 +13,7 @@ class TaskExecutor:
     def execute(self) -> str:
         value = self.initial_value
         for task in self.tasks:
+            time.sleep(5)
             value = task.do(value)
 
         return value

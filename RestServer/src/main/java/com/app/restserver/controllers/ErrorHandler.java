@@ -18,22 +18,23 @@ public class ErrorHandler {
         FieldError fieldError = e.getBindingResult().getFieldError();
 
         assert fieldError != null;
-        var errorResponse = new ErrorResponse(
-                request.getRequestURI(),
-                400,
-                fieldError.getField() + ": " + fieldError.getDefaultMessage()
-        );
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .path(request.getRequestURI())
+                .status(400)
+                .message(fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handle(HttpMessageNotReadableException e, HttpServletRequest request) {
-        var errorResponse = new ErrorResponse(
-                request.getRequestURI(),
-                400,
-                e.getMessage()
-        );
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .path(request.getRequestURI())
+                .status(400)
+                .message(e.getMessage())
+                .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }

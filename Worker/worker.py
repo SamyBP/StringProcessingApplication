@@ -60,9 +60,9 @@ class Worker:
 
 
 load_dotenv()
-host = os.getenv("RABBITMQ_HOST")
-virtual_host = os.getenv("RABBITMQ_VHOST")
+url = os.getenv("RABBITMQ_URL")
+params = pika.URLParameters(url)
 work_queue = os.getenv("RABBITMQ_WORK_QUEUE")
-conn = pika.BlockingConnection(pika.ConnectionParameters(host=host, virtual_host=virtual_host))
+conn = pika.BlockingConnection(params)
 worker = Worker(conn, work_queue)
 worker.work()

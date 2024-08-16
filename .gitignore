@@ -15,6 +15,7 @@ RestServer/.project
 RestServer/.settings
 RestServer/.springBeans
 RestServer/.sts4-cache
+RestServer/.env
 
 #Worker
 Worker/.idea
