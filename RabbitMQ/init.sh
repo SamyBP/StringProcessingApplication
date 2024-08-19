@@ -2,7 +2,6 @@
 
 echo 'NODENAME=rabbit@localhost' > /etc/rabbitmq/rabbitmq-env.conf
 
-# Create Rabbitmq user
 (rabbitmqctl wait --timeout 60 $RABBITMQ_PID_FILE ; \
 rabbitmqctl add_user $RABBITMQ_USER $RABBITMQ_PASSWORD 2>/dev/null ; \
 rabbitmqctl add_vhost $RABBITMQ_VHOST
