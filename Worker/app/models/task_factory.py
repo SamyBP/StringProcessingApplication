@@ -5,6 +5,10 @@ from app.models.upper_task import UpperTask
 from app.models.substring_task import SubstringTask
 
 
+class InvalidTaskTypeException(Exception):
+    pass
+
+
 class TaskFactory:
 
     @staticmethod
@@ -19,4 +23,4 @@ class TaskFactory:
             case "TRIM":
                 return TrimTask(args["character"])
             case _:
-                raise Exception("Unsupported task")
+                raise InvalidTaskTypeException(f"Unsupported task {task_type}")

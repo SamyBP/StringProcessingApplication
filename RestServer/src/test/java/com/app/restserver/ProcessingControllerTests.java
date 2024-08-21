@@ -117,7 +117,7 @@ public class ProcessingControllerTests {
 
     private void performPostAndExpectBadRequest() {
         Assertions.assertDoesNotThrow(() -> {
-            mockMvc.perform(post("/jobs")
+            mockMvc.perform(post("/api/v1/jobs")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(givenJob)))
                     .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -127,7 +127,7 @@ public class ProcessingControllerTests {
     @Test
     public void whenValidInput_statusCodeIsAccepted() {
         Assertions.assertDoesNotThrow(() -> {
-            mockMvc.perform(post("/jobs")
+            mockMvc.perform(post("/api/v2/jobs")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(givenJob)))
                     .andExpect(MockMvcResultMatchers.status().isAccepted());

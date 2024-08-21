@@ -1,15 +1,25 @@
 
 
 services:
-  client:
+  client-1:
     build: ./Client
     image: "client"
-    container_name: "client"
+    container_name: "client-1"
     ports:
       - "8002:8000"
     environment:
-      - STRING_PROCESSING_ENDPOINT_APP=http://nginx:80/jobs
+      - STRING_PROCESSING_ENDPOINT_APP=http://nginx:80/api/v1/jobs
+    networks:
+      - app
 
+  client-2:
+    build: ./Client
+    image: "client"
+    container_name: "client-2"
+    ports:
+      - "8003:8000"
+    environment:
+      - STRING_PROCESSING_ENDPOINT_APP=http://nginx:80/api/v2/jobs
     networks:
       - app
 
@@ -34,17 +44,60 @@ services:
     networks:
       - app
 
-  worker:
-    build: ./Worker
-    image: "worker"
+  postgres:
+    image: "library/postgres"
+    container_name: "postgres"
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=mq_admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=message_queue_db
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./PostgreSQL:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app
+
+  worker-v1:
+    build:
+      context: ./Worker
+      dockerfile: v1.Dockerfile
+    image: "worker.v1"
     environment:
       - RABBITMQ_URL=amqp://app:app@rabbitmq:5672/app.vhost
       - RABBITMQ_WORK_QUEUE=work_queue
     deploy:
       mode: replicated
-      replicas: ${WORKER_REPLICAS_COUNT}
+      replicas: ${WORKER_V1_REPLICAS_COUNT}
     depends_on:
       rabbitmq:
+          condition: service_healthy
+    networks:
+      - app
+
+  worker-v2:
+    build:
+      context: ./Worker
+      dockerfile: v2.Dockerfile
+    image: "worker.v2"
+    environment:
+      - POSTGRES_DATABASE_USER=mq_admin
+      - POSTGRES_DATABASE_PASSWORD=admin
+      - POSTGRES_DATABASE_HOST=postgres
+      - POSTGRES_DATABASE_PORT=5432
+      - POSTGRES_DATABASE=message_queue_db
+    deploy:
+      mode: replicated
+      replicas: ${WORKER_V2_REPLICAS_COUNT}
+    depends_on:
+      postgres:
           condition: service_healthy
     networks:
       - app
@@ -62,6 +115,9 @@ services:
       - SPRING_RABBITMQ_USERNAME=app
       - SPRING_RABBITMQ_PASSWORD=app
       - SPRING_RABBITMQ_PORT=5672
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/message_queue_db
+      - SPRING_DATASOURCE_USERNAME=mq_admin
+      - SPRING_DATASOURCE_PASSWORD=admin
     deploy:
       mode: replicated
       replicas: ${SERVER_REPLICAS_COUNT}

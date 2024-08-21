@@ -1,5 +1,4 @@
-from app.models.task_factory import TaskFactory
-from app.services.executor import TaskExecutor
+from app.services.executor import JobExecutor
 
 from dotenv import load_dotenv
 
@@ -8,15 +7,6 @@ import pika
 import requests
 
 import os
-
-
-class Response:
-    id: str
-    result: str
-    is_success: bool
-
-    def __init__(self, id: str):
-        self.id = id
 
 
 class Worker:
@@ -38,23 +28,8 @@ class Worker:
     def __process_message(ch, method, properties, body):
         job_data = json.loads(body.decode())
         print(f"Received job {job_data}")
-
-        tasks = []
-        for task in job_data["tasks"]:
-            tasks.append(TaskFactory.get_task(task["type"], task["args"]))
-
-        task_executor = TaskExecutor(job_data["input"], tasks)
-        response = Response(job_data["id"])
-
-        try:
-            response.result = task_executor.execute()
-            response.is_success = True
-        except Exception as e:
-            response.result = str(e)
-            response.is_success = False
-
-        print(response.__dict__)
-
+        job_executor = JobExecutor(job_data)
+        response = job_executor.execute()
         requests.post(job_data["callback"], json=response.__dict__)
         ch.basic_ack(delivery_tag=method.delivery_tag)
 

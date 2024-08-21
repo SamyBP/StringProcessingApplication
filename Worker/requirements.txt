@@ -1,5 +1,2 @@
 requests
-pika
 python-dotenv
-
-

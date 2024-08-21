@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("api")
 public class ProcessingController {
     private final JobSenderService jobSenderService;
     private final Logger logger = LoggerFactory.getLogger(ProcessingController.class);
@@ -23,14 +24,21 @@ public class ProcessingController {
         this.jobSenderService = jobSenderService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "jobs")
-    public ResponseEntity<?> handleJobRequest(@RequestBody @Valid Job job) {
-        logger.info(String.format("Received job:%s", job));
-        jobSenderService.send(job);
+    @RequestMapping(method = RequestMethod.POST, value = "/v1/jobs")
+    public ResponseEntity<?> handleV1JobRequest(@RequestBody @Valid Job job) {
+        logger.info(String.format("[V1] received job:%s", job));
+        jobSenderService.sendToRabbitQueue(job);
         return ResponseEntity.accepted().build();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "callback")
+    @RequestMapping(method = RequestMethod.POST, value = "/v2/jobs")
+    public ResponseEntity<?> handleV2JobRequest(@RequestBody @Valid Job job) {
+        logger.info(String.format("[V2] received job:%s", job));
+        jobSenderService.sendToPostgresQueue(job);
+        return ResponseEntity.accepted().build();
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/callback")
     public ResponseEntity<?> testCallback(@RequestBody TargetResponse targetResponse) {
         logger.info(String.format("Received response:%s", targetResponse));
         return ResponseEntity.ok().build();
