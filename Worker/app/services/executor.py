@@ -2,11 +2,15 @@ from typing import List, Any
 from app.models.task import Task
 from app.models.task_factory import TaskFactory, InvalidTaskTypeException
 
+import time
+
 
 class Response:
-    id: str
+    id: int
     result: str
-    is_success: bool
+    isSuccess: bool
+    startedAt: int
+    endedAt: int
 
 
 class TaskExecutor:
@@ -33,20 +37,22 @@ class JobExecutor:
         response = Response()
         try:
             tasks = []
-            for task in self.job_data["tasks"]:
-                tasks.append(TaskFactory.get_task(task["type"], task["args"]))
+            for task in self.job_data["modules"]:
+                tasks.append(TaskFactory.get_task(task["name"], task["args"]))
 
+            response.startedAt = int(time.time())
             task_executor = TaskExecutor(self.job_data["input"], tasks)
             response.id = self.job_data["id"]
             response.result = task_executor.execute()
-            response.is_success = True
+            response.isSuccess = True
         except InvalidTaskTypeException as e:
             response.id = self.job_data.get("id", None)
-            response.is_success = False
+            response.isSuccess = False
             response.result = "dummy test"
         except Exception as e:
             response.id = self.job_data.get("id", None)
             response.result = str(e)
-            response.is_success = False
+            response.isSuccess = False
 
+        response.endedAt = int(time.time())
         return response

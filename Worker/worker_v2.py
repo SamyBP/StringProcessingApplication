@@ -34,8 +34,8 @@ class Worker:
                 raise Exception(f"Failed to send back the result to {job_data['callback']}: {r.text}")
         except Exception as e:
             response.result = str(e)
-            response.is_success = False
-        self.__mark_job_as_finished(connection, q_record[0], response.result, response.is_success)
+            response.isSuccess = False
+        self.__mark_job_as_finished(connection, q_record[0], response.result, response.isSuccess)
         self.connection_pool.putconn(connection)
 
     @staticmethod
