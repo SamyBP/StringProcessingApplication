@@ -16,21 +16,24 @@ app = FastAPI()
 
 
 class ProcessedItem(BaseModel):
-    id: str
+    id: int
     result: str
-    is_success: bool
+    isSuccess: bool
+    startedAt: int
+    endedAt: int
 
 
-class Task(BaseModel):
-    type: str
+class Module(BaseModel):
+    name: str
     args: dict
 
 
 class TriggerOperation(BaseModel):
-    id: str
+    id: int
     input: str
     callback: str
-    tasks: List[Task]
+    version: int
+    modules: List[Module]
 
 
 @app.post("/callback")
