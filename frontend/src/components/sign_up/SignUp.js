@@ -1,16 +1,16 @@
 import { Button, TextField, Typography,Stack, Card} from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 function SignUp() {
 
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const register = (e) => {
     e.preventDefault();
-    console.log(username, email, password);
 
     fetch('http://localhost:8080/api/auth/register', {
       method: 'POST',
@@ -29,6 +29,7 @@ function SignUp() {
         return Promise.reject(response);
       }
       console.log("Succesfully signed up!");
+      navigate("/login");
     })
     .catch(response => {
       console.log(response.status);
