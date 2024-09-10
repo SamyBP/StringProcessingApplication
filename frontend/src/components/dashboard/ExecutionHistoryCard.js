@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody } from "@mui/material";
+import { Link } from "react-router-dom";
 
 
 export default function ExecutionHistoryCard() {
@@ -42,7 +43,13 @@ export default function ExecutionHistoryCard() {
                     { executions.map( (item, index) => (
                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': {backgroundColor:'rgba(0, 0, 0, 0.04)'}  }} >
                             <TableCell component={"th"} scope="row">
-                                {item.pipeName}
+                                <Link
+                                    to='/execution-details'
+                                    style={{ textDecoration: "none", color: "black" }}
+                                    state={{ item }}
+                                >
+                                    {item.pipeName}
+                                </Link>
                             </TableCell>
                             <TableCell component={"th"} scope="row">
                                 {item.status}
@@ -52,6 +59,5 @@ export default function ExecutionHistoryCard() {
                 </TableBody>
             </Table>
         </TableContainer>
-
     );
 }
