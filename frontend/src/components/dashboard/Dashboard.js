@@ -5,19 +5,6 @@ import PublicPipeCard from "./PublicPipeCard";
 import ExecutionHistoryCard from "./ExecutionHistoryCard";
 import { useEffect, useState } from "react";
 
-// const pipes = [
-//     { name: 'benipintea/FirstProcessingPipe', userId: null, isPublic: false, modules: [ 'SUBSTRING', 'TRIM', 'LOWER' ] },
-//     { name: 'benipintea/SecondProcessingPipe', userId: null, isPublic: true, modules: [ 'LOWER', 'TRIM' ] },
-//     { name: 'benipintea/ThirdProcessingPipe', userId: null, isPublic: true, modules: [ 'UPPPER', 'SUBSTRING' ] },
-//     { name: 'benipintea/JustTrim', userId: null, isPublic: false, modules: [ 'TRIM' ] },
-
-//     { name: 'johndoe/CoolProcessingPipe', userId: 2, isPublic: true, modules: [ 'SUBSTRING', 'TRIM', 'LOWER' ] },
-//     { name: 'janedoe01/UsefullModulesForDayToDayTasks', userId: 3, isPublic: true, modules: [ 'LOWER', 'TRIM' ] },
-//     { name: 'janedoe01/ProcessingPipe', userId: 3, isPublic: true, modules: [ 'UPPPER', 'SUBSTRING' ] },
-//     { name: 'janedoe01/PublicPipe', userId: 3, isPublic: true, modules: [ 'TRIM' ] }
-
-// ]
-
 export default function Dashboard() {
 
     const [pipes, setPipes] = useState([]);

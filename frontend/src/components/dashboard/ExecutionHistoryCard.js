@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody } from "@mui/material";
-
-const executions = [
-
-    {pipe: "benipintea/FirstProcessingPipe", status: 'FINISHED'},
-    {pipe: "benipintea/JustTrim", status: 'FINISHED'},
-    {pipe: "johndoe/CoolProcessingPipe", status: 'FINISHED'},
-    {pipe: "benipintea/SecondProcessingPipe", status: 'ERROR'},
-]
 
 
 export default function ExecutionHistoryCard() {
+
+    const [executions, setExecutions] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:8080/api/executions', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'token': localStorage.getItem('token')
+            },
+        })
+        .then(response => {
+            if (response.status !== 200)
+                return Promise.reject(response);
+            return response.json();;
+        })
+        .then(response => {
+            setExecutions(response);
+        })
+        .catch(response => {
+            console.log(response.status);
+        })
+    },[])
+
+
     return (
         <TableContainer component={Paper} >
             <Table>
@@ -24,7 +42,7 @@ export default function ExecutionHistoryCard() {
                     { executions.map( (item, index) => (
                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': {backgroundColor:'rgba(0, 0, 0, 0.04)'}  }} >
                             <TableCell component={"th"} scope="row">
-                                {item.pipe}
+                                {item.pipeName}
                             </TableCell>
                             <TableCell component={"th"} scope="row">
                                 {item.status}
