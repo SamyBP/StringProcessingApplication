@@ -28,7 +28,7 @@ export default function Pipe() {
 
                         <Stack direction="row" spacing={2}>
                             <Button variant="outlined" size="small" startIcon={ <PlayArrowIcon /> } sx={{ color: '#01579b', border: 'none' }}>Run</Button>
-                            { item.userId === null && 
+                            { item.ownerUsername === 'benipintea' && 
                                 <IconButton aria-label="settings">
                                     <MoreVertRoundedIcon sx={{ color: '#01579b' }} />
                                 </IconButton> }
@@ -45,10 +45,10 @@ export default function Pipe() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {item.modules.map((module) =>(
-                                    <TableRow key={module}  sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
+                            {item.modules.map((module, index) =>(
+                                    <TableRow key={index}  sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
                                         <TableCell component="th" scope="row"> 
-                                            {module}
+                                            {module.name}
                                         </TableCell>
                                     </TableRow>
                             ))}
