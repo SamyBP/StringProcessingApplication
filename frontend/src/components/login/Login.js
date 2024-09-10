@@ -34,6 +34,8 @@ export default function Login() {
         console.log(response.expiresIn);
         console.log(response.token);
         localStorage.setItem('token', response.token);
+        localStorage.setItem('username', response.username);
+        localStorage.setItem('email', email);
         navigate('/dashboard');
       })
       .catch(response => {

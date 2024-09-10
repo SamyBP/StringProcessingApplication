@@ -2,9 +2,9 @@ import React from 'react';
 import MuiDrawer from "@mui/material/Drawer"
 import drawerClasses from '@mui/material/Drawer';
 import { styled }  from '@mui/material/styles';
-import { Avatar, Divider, Stack, Typography } from '@mui/material';
+import { Avatar, Button, Divider, Stack, Typography } from '@mui/material';
 import {List, ListItem, ListItemText, ListItemButton} from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const drawerWidth = 300;
 
@@ -20,6 +20,14 @@ const Drawer = styled(MuiDrawer)({
 });
 
 const SideMenu = ({ userPipes }) => {
+
+    const navigate = useNavigate();
+
+    const logOut = (e) => {
+        localStorage.clear();
+        navigate("/");
+    }
+
     return (
         <Drawer
             variant="permanent"
@@ -32,13 +40,13 @@ const SideMenu = ({ userPipes }) => {
         >
 
             <Stack direction={'row'} spacing={2} sx={{ margin:2 }}>
-                <Avatar sx={{ width: 40, height: 40, bgcolor: "#01579b" }}> {'benipintea'.charAt(0).toUpperCase()} </ Avatar> 
+                <Avatar sx={{ width: 40, height: 40, bgcolor: "#01579b" }}> {localStorage.getItem('username').charAt(0).toUpperCase()} </ Avatar> 
                 <Stack>
                     <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '24px' }}> 
-                        benipintea
+                        {localStorage.getItem("username")}
                     </Typography>
                     <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                        b.pintea04@gmail.com
+                        {localStorage.getItem("email")}
                     </Typography>
                 </Stack>  
             </Stack>
@@ -61,7 +69,9 @@ const SideMenu = ({ userPipes }) => {
                         </ListItem>
                     ))}
                 </List>
-            </ Stack>   
+            </ Stack>
+
+            <Button variant='contained' sx={{ backgroundColor: "#01579b", margin:1 }} onClick={logOut}>Log out</Button>        
 
         </Drawer>
     );

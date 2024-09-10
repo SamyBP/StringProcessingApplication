@@ -77,7 +77,7 @@ export default function PipeCreationCard() {
         <Stack sx={{ margin: 2}} spacing={1}>
             
             <Stack direction={"row"} sx={{ display:"flex", alignItems: "center" }} spacing={ 1 }>
-                <h2>Create a new pipe for benipintea</h2>
+                <h2>Create a new pipe for {localStorage.getItem("username")} </h2>
                 <Fab sx={{backgroundColor: "#01579b", color: "white" }} aria-label="add" size="small" disabled={ isAddDisabled } onClick={submitForm}>
                     <AddIcon />
                 </Fab>

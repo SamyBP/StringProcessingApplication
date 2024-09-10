@@ -28,7 +28,7 @@ export default function Pipe() {
 
                         <Stack direction="row" spacing={2}>
                             <Button variant="outlined" size="small" startIcon={ <PlayArrowIcon /> } sx={{ color: '#01579b', border: 'none' }}>Run</Button>
-                            { item.ownerUsername === 'benipintea' && 
+                            { item.ownerUsername === localStorage.getItem('username') && 
                                 <IconButton aria-label="settings">
                                     <MoreVertRoundedIcon sx={{ color: '#01579b' }} />
                                 </IconButton> }

@@ -41,7 +41,7 @@ public class AuthenticationController {
         logger.info(String.format("Received login request: %s", loginRequest));
         User user = authenticationService.login(loginRequest);
         String token = jwtUtil.generate(user.getId(), user.getUsername());
-        LoginResponse loginResponse = new LoginResponse(jwtUtil.getValidPeriod(), token);
+        LoginResponse loginResponse = new LoginResponse(user.getUsername(), jwtUtil.getValidPeriod(), token);
         return ResponseEntity.ok(loginResponse);
     }
 }

@@ -32,11 +32,11 @@ export default function Dashboard() {
     },[])
 
     let  userPipes = pipes.filter((pipe) => {
-        return pipe.ownerUsername === 'benipintea';
+        return pipe.ownerUsername === localStorage.getItem('username');
     });
 
     let publicPipes = pipes.filter((pipe) => {
-        return pipe.ownerUsername !== 'benipintea' && pipe.isPublic === true;
+        return pipe.ownerUsername !== localStorage.getItem('username') && pipe.isPublic === true;
     });
 
     return(
