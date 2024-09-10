@@ -1,7 +1,5 @@
 import React from "react";
-import Stack from "@mui/material/Stack"
-import {ListItem, ListItemText, ListItemButton } from "@mui/material";
-import CodeIcon from "@mui/icons-material/Code"
+import { TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody } from "@mui/material";
 
 const executions = [
 
@@ -9,24 +7,29 @@ const executions = [
     {pipe: "benipintea/JustTrim"},
     {pipe: "johndoe/CoolProcessingPipe"},
     {pipe: "benipintea/SecondProcessingPipe"},
-    {pipe: "benipintea/FirstProcessingPipe"},
 ]
 
 
 export default function ExecutionHistoryCard() {
     return (
-        <Stack sx={{ margin: 2 }} spacing={1}>
-            
-            <h3>Execution history</h3>
+        <TableContainer component={Paper} >
+            <Table>
+                <TableHead sx={{ backgroundColor: "#f6f8fa" }}>
+                    <TableRow>
+                        <TableCell><b>Execution history</b></TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    { executions.map( (item, index) => (
+                        <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': {backgroundColor:'rgba(0, 0, 0, 0.04)'}  }} >
+                            <TableCell component={"th"} scope="row">
+                                    {item.pipe}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
 
-            {executions.map((item, index) => (
-                <ListItem key={index} disablePadding sx={{ display: 'flex', alignItems: "center" }}>
-                    <CodeIcon sx={{ color:'#01579b' }}/>
-                    <ListItemButton>
-                                <ListItemText primary={item.pipe} />  
-                    </ListItemButton>
-                </ListItem>    
-            ))}    
-        </ Stack>
     );
 }

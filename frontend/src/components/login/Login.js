@@ -1,35 +1,27 @@
-import  Button  from "@mui/material/Button";
-import  Paper  from "@mui/material/Paper";
-import TextField from "@mui/material/TextField"
-import { Typography, Container } from "@mui/material";
-import { Link } from "react-router-dom"
+import { Button, TextField, Typography,Stack, Card} from '@mui/material';
+import { Link } from 'react-router-dom';
 
 
 export default function Login() {
 
     return (
-        <Container maxWidth="sm" align="center">
-            <Paper elevation={10}>
-                <Container maxWidth="sm">
-                    <h2>Login</h2>
-                </Container>
+        <div style={{ display:'flex', justifyContent:'center', alignItems:'center' }}>
+        <Card variant="outlined" sx={{ width: 1/2, marginTop:5 }} >
+            <Stack spacing={5} alignContent={"center"} alignItems={"center"} margin={2} >
+              <h2>Login</h2>
 
-                <Container>
-                    <TextField label="email" variant='standard' placeholder='email' fullWidth required style={{ margin: 10 }} />
-                </Container>
-                
-                <Container>
-                    <TextField label="password" variant='standard' placeholder='password' fullWidth type='password' required style={{ margin: 10 }} />
-                </Container>
+              <TextField label="email" variant='standard' placeholder='email' fullWidth required style={{ marginTop: 5 }} />
+              <TextField label="password" variant='standard' placeholder='password' type='password' fullWidth required style={{ marginTop: 5 }} />
+            
+              <Button variant='contained' color='primary' style={{ marginTop: 10 }} fullWidth >Login</Button>
 
-                <Container>
-                    <Button variant='contained' color='primary' style={{ margin: 10 }} fullWidth >Login</Button>
-                </Container>
-                <Typography style={{ margin: 10 }}>
-                    <Link to = "/sign-up">Don't have an account? Sign up now.</Link>
-                </Typography>
-            </Paper>
-        </Container>
+              <Typography style={{ marginTop: 10 }}>
+                <Link to="/sign-up">Don't have an account? Sign-up.</Link>
+              </Typography>
+
+            </Stack>
+        </Card>
+      </div>
     );
 }
 

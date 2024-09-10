@@ -1,5 +1,6 @@
 package com.app.restserver.endpoints.responses;
 
+import com.app.restserver.entities.Execution;
 import com.app.restserver.entities.ExecutionModule;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +21,18 @@ public class ExecutionHistoryResponse {
     private List<ExecutionModule> modules;
     private String result;
     private String status;
+
+    public static ExecutionHistoryResponse fromEntity(Execution execution) {
+        return ExecutionHistoryResponse.builder()
+                .createdAt(execution.getCreatedAt())
+                .startedAt(execution.getStartedAt())
+                .endedAt(execution.getEndedAt())
+                .pipeName(execution.getPipe().getName())
+                .version(execution.getVersion())
+                .input(execution.getInput())
+                .modules(execution.getExecutionModules())
+                .result(execution.getResult())
+                .status(execution.getStatus())
+                .build();
+    }
 }

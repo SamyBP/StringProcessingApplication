@@ -4,7 +4,7 @@ import com.app.restserver.entities.Pipe;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
@@ -20,7 +20,6 @@ public interface PipeRepository extends BaseRepository<Pipe> {
     """)
     Long findOwnerIdForPipe(@Param("pipeId") Long pipeId);
 
-    @Transactional
     default void updatePipeDefinition(Long pipeId, boolean isPublic,List<Long> moduleIds) {
         removePipeDefinition(pipeId);
         updatePipeVisibility(pipeId, isPublic);

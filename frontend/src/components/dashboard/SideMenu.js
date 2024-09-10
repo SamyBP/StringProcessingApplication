@@ -32,7 +32,7 @@ const SideMenu = ({ userPipes }) => {
         >
 
             <Stack direction={'row'} spacing={2} sx={{ margin:2 }}>
-                <Avatar sx={{ width: 40, height: 40, bgcolor: "#01579b" }}> BP </ Avatar> 
+                <Avatar sx={{ width: 40, height: 40, bgcolor: "#01579b" }}> {'benipintea'.charAt(0).toUpperCase()} </ Avatar> 
                 <Stack>
                     <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '24px' }}> 
                         benipintea

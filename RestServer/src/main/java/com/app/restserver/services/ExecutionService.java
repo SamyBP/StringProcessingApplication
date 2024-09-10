@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 @Service
 public class ExecutionService {
@@ -73,22 +72,8 @@ public class ExecutionService {
     public List<ExecutionHistoryResponse> getUsersExecutionHistory(Long userId) {
         List<Execution> executions = executionRepository.findAllByUserId(userId);
         return executions.stream()
-                .map(computeExecutionMapperFunction())
+                .map(ExecutionHistoryResponse::fromEntity)
                 .toList();
-    }
-
-    private Function<Execution, ExecutionHistoryResponse> computeExecutionMapperFunction() {
-        return executionLog -> ExecutionHistoryResponse.builder()
-                .createdAt(executionLog.getCreatedAt())
-                .startedAt(executionLog.getStartedAt())
-                .endedAt(executionLog.getEndedAt())
-                .pipeName(executionLog.getPipe().getName())
-                .version(executionLog.getVersion())
-                .input(executionLog.getInput())
-                .modules(executionLog.getExecutionModules())
-                .result(executionLog.getResult())
-                .status(executionLog.getStatus())
-                .build();
     }
 
     @Transactional

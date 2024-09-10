@@ -1,7 +1,6 @@
 package com.app.restserver.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,6 @@ import java.util.List;
 public class Pipe extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private User user;
 
     @Column(name = "name")

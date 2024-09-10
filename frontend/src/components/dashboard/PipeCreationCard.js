@@ -32,7 +32,7 @@ export default function PipeCreationCard() {
         <Stack sx={{ margin: 2}} spacing={1}>
             
             <Stack direction={"row"} sx={{ display:"flex", alignItems: "center" }} spacing={ 1 }>
-                <h3>Create a new pipe for benipintea</h3>
+                <h2>Create a new pipe for benipintea</h2>
                 <Fab sx={{backgroundColor: "#01579b", color: "white" }} aria-label="add" size="small" disabled={ isAddDisabled }>
                     <AddIcon />
                 </Fab>
@@ -45,7 +45,9 @@ export default function PipeCreationCard() {
                 </RadioGroup>
             </FormControl>
 
-            <TextField label="Pipe name" variant='outlined' placeholder='name your new pipe...' required style={{ width: 400 }}/>
+            <TextField label="Pipe name" variant='outlined' placeholder='name your new pipe...' required fullWidth/>
+
+            <h4>Choose modules for your pipe</h4>
 
             <Stack direction="row" spacing={2}>
                     {modules.map((item, index) => (
@@ -55,9 +57,9 @@ export default function PipeCreationCard() {
                     ))}
             </Stack>
 
-            <Stack direction="row" spacing={1} flexWrap={"wrap"} justifyContent={"flex-start"}>
+            <Stack direction="row" spacing={1} flexWrap={"wrap"} justifyContent={"flex-start"} >
                 {selectedModules.map((module, index) => (
-                    <Chip key={index} color="primary" variant="contained" label={module} onDelete={() => removeSelectedModule(index)} />
+                    <Chip key={index} size="small" color="primary" variant="contained" label={module} onDelete={() => removeSelectedModule(index)} />
                 ))}
             </Stack>
         </Stack>

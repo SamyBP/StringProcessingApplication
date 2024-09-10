@@ -28,9 +28,10 @@ export default function Pipe() {
 
                         <Stack direction="row" spacing={2}>
                             <Button variant="outlined" size="small" startIcon={ <PlayArrowIcon /> } sx={{ color: '#01579b', border: 'none' }}>Run</Button>
-                            <IconButton aria-label="settings">
-                                <MoreVertRoundedIcon sx={{ color: '#01579b' }} />
-                            </IconButton>
+                            { item.userId === null && 
+                                <IconButton aria-label="settings">
+                                    <MoreVertRoundedIcon sx={{ color: '#01579b' }} />
+                                </IconButton> }
                         </Stack>
                     </Stack>
                 </Stack>
@@ -44,13 +45,13 @@ export default function Pipe() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            { item.modules.map((module) =>(
+                            {item.modules.map((module) =>(
                                     <TableRow key={module}  sx={{ '&:last-child td, &:last-child th': { border: 0 } }} >
                                         <TableCell component="th" scope="row"> 
                                             {module}
                                         </TableCell>
                                     </TableRow>
-                            )) }
+                            ))}
                         </TableBody>
                     </Table>
                 </TableContainer>

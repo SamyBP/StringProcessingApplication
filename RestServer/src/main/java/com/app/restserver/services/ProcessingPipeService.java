@@ -2,6 +2,7 @@ package com.app.restserver.services;
 
 import com.app.restserver.endpoints.requests.PipeCreationRequest;
 import com.app.restserver.endpoints.requests.PipeUpdateRequest;
+import com.app.restserver.endpoints.responses.PipeResponse;
 import com.app.restserver.entities.Module;
 import com.app.restserver.entities.Pipe;
 import com.app.restserver.entities.User;
@@ -32,30 +33,34 @@ public class ProcessingPipeService {
     }
 
     @Transactional
-    public void create(Long userId, PipeCreationRequest request) {
+    public PipeResponse create(Long userId, PipeCreationRequest request) {
         User user = userRepository.findByIdIfExists(userId);
         List<Module> modules  = moduleRepository.findAllModulesOrderedByDefinitionId(request.getModuleIds());
         String pipeName = user.getUsername() + "/" + request.getName();
         Pipe pipe = new Pipe(user, pipeName, request.getIsPublic(), modules);
-        pipeRepository.save(pipe);
+        return PipeResponse.fromEntity(pipeRepository.save(pipe));
     }
 
-    public List<Pipe> getAll(Long userId) {
+    public List<PipeResponse> getAll(Long userId) {
         List<Pipe> pipes = pipeRepository.findAllCreatedByUserOrPublicPipes(userId);
         pipes.forEach(pipe -> pipe.setModules(moduleRepository.findPipeDefinitionModules(pipe.getId())));
-        return pipes;
+        return pipes.stream()
+                .map(PipeResponse::fromEntity)
+                .toList();
     }
 
-    public Pipe getById(Long pipeId) {
+    public PipeResponse getById(Long pipeId) {
         Pipe pipe = pipeRepository.findByIdIfExists(pipeId);
         pipe.setModules(moduleRepository.findPipeDefinitionModules(pipeId));
-        return pipe;
+        return PipeResponse.fromEntity(pipe);
     }
 
-    public Pipe updatePipeDefinition(PipeUpdateRequest pipeUpdateRequest, Long userId) {
+    @Transactional
+    public PipeResponse updatePipeDefinition(PipeUpdateRequest pipeUpdateRequest, Long userId) {
         checkOwnershipForPipe(userId, pipeUpdateRequest.getPipeId());
         pipeRepository.updatePipeDefinition(pipeUpdateRequest.getPipeId(), pipeUpdateRequest.isPublic(), pipeUpdateRequest.getModuleIds());
-        return pipeRepository.findByIdIfExists(pipeUpdateRequest.getPipeId());
+        Pipe pipe = pipeRepository.findByIdIfExists(pipeUpdateRequest.getPipeId());
+        return PipeResponse.fromEntity(pipe);
     }
 
     @Transactional

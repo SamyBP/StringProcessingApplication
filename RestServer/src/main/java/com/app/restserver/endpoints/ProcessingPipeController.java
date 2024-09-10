@@ -4,8 +4,8 @@ import com.app.restserver.authentication.Authenticated;
 import com.app.restserver.authentication.FromToken;
 import com.app.restserver.endpoints.requests.PipeCreationRequest;
 import com.app.restserver.endpoints.requests.PipeUpdateRequest;
+import com.app.restserver.endpoints.responses.PipeResponse;
 import com.app.restserver.endpoints.util.EndpointsUtil;
-import com.app.restserver.entities.Pipe;
 import com.app.restserver.services.ProcessingPipeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,32 +26,31 @@ public class ProcessingPipeController {
         this.processingPipeService = processingPipeService;
     }
 
-    //TODO return the newly created entity
     @Authenticated
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> create(@FromToken Long userId, @RequestBody @Valid PipeCreationRequest pipeCreationRequest) {
-        processingPipeService.create(userId, pipeCreationRequest);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<PipeResponse> create(@FromToken Long userId, @RequestBody @Valid PipeCreationRequest pipeCreationRequest) {
+        PipeResponse pipeResponse = processingPipeService.create(userId, pipeCreationRequest);
+        return new ResponseEntity<>(pipeResponse, HttpStatus.CREATED);
     }
 
     @Authenticated
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Pipe>> getAll(@FromToken Long userId) {
-        List<Pipe> pipesCreatedByUser = processingPipeService.getAll(userId);
+    public ResponseEntity<List<PipeResponse>> getAll(@FromToken Long userId) {
+        List<PipeResponse> pipesCreatedByUser = processingPipeService.getAll(userId);
         return new ResponseEntity<>(pipesCreatedByUser, HttpStatus.OK);
     }
 
     @Authenticated
     @RequestMapping(method = RequestMethod.GET, value = "/{pipe_id}")
-    public ResponseEntity<?> getByPipeId(@PathVariable(value = "pipe_id") Long pipeId) {
-        Pipe pipe = processingPipeService.getById(pipeId);
+    public ResponseEntity<PipeResponse> getByPipeId(@PathVariable(value = "pipe_id") Long pipeId) {
+        PipeResponse pipe = processingPipeService.getById(pipeId);
         return new ResponseEntity<>(pipe, HttpStatus.OK);
     }
 
     @Authenticated
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> updatePipeDefinition(@RequestBody PipeUpdateRequest pipeUpdateRequest, @FromToken Long userId) {
-        Pipe pipe = processingPipeService.updatePipeDefinition(pipeUpdateRequest, userId);
+        PipeResponse pipe = processingPipeService.updatePipeDefinition(pipeUpdateRequest, userId);
         return new ResponseEntity<>(pipe, HttpStatus.CREATED);
     }
 

@@ -22,6 +22,9 @@ public class AuthenticationTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
+        if (!(handler instanceof HandlerMethod))
+            return true;
+
         Authenticated authenticated = ((HandlerMethod) handler).getMethodAnnotation(Authenticated.class);
 
         if (authenticated == null)
