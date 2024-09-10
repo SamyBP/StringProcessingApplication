@@ -1,13 +1,21 @@
 import { Button, Card, Divider, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 
 export default function Pipe() {
 
+    const navigate = useNavigate();    
     const location = useLocation();
     const { item } = location.state;
+
+    console.log(item);
+
+    const runPipe = (event) => {
+        event.preventDefault();
+        navigate('/execute', {state: {item: item} });
+    }
 
     return (
         <div style={{ 
@@ -27,7 +35,9 @@ export default function Pipe() {
                         <br/>
 
                         <Stack direction="row" spacing={2}>
-                            <Button variant="outlined" size="small" startIcon={ <PlayArrowIcon /> } sx={{ color: '#01579b', border: 'none' }}>Run</Button>
+                            <Button variant="outlined" size="small" startIcon={ <PlayArrowIcon /> } sx={{ color: '#01579b', border: 'none' }} onClick={runPipe}>
+                                Run
+                            </Button>
                             { item.ownerUsername === localStorage.getItem('username') && 
                                 <IconButton aria-label="settings">
                                     <MoreVertRoundedIcon sx={{ color: '#01579b' }} />
