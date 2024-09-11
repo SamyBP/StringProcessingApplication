@@ -56,5 +56,4 @@ public class Execution extends BaseEntity {
         this.status = "NOT_PROCESSED";
         this.createdAt = LocalDateTime.now();
     }
-
 }

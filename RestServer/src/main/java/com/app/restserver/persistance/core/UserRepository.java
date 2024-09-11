@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface UserRepository extends BaseRepository<User> {
-
     default User findByEmailIfExists(String email) {
         return findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("User with email:%s does not exist", email)));

@@ -1,10 +1,68 @@
 import { Button, Card, Divider, FormControl, FormControlLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../header/Header";
+import { useState } from "react";
 
-export default function PipeExecutionForm() {
+export default function PipeExecutionForm() {    
+    
+    const navigate = useNavigate();
     const location = useLocation();
     const { item } = location.state;
+
+
+    const [version, setVersion] = useState(1);
+    const [input, setInput] = useState('');
+    const [modules, setModules] = useState(
+        item.modules.map((module) => ({
+            name: module.name,
+            args: {...module.args}
+        }))
+    );
+
+    const moduleArgumentChange = (index, argumentName, value) => {
+        const temp = [...modules];
+        temp[index].args[argumentName] = value;
+        setModules(temp);
+    }
+
+    const submit = (event) => {
+        event.preventDefault();
+        
+        fetch('http://localhost:8080/api/executions/private', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'token': localStorage.getItem('token')
+            },
+            body: JSON.stringify({
+              input: input,
+              pipeId: item.id,
+              version: version,
+              modules: modules              
+            })  
+          })
+          .then(response => {
+            if (response.status !== 202) {
+              return Promise.reject(response);
+            }
+            
+            console.log("Triggered execution succefully!");
+            navigate('/pipe', {state: {item: item}});
+          })
+          .then(response => {
+            navigate('/dashboard');
+          })
+          .catch(response => {
+            console.log(response.status);
+            response.json().then(json => {
+              console.log(json.message);
+            }) 
+          })   
+
+
+
+    }
 
     return (
 
@@ -20,25 +78,27 @@ export default function PipeExecutionForm() {
                     <h3>Choose an execution version</h3>
                     
                     <FormControl>
-                        <RadioGroup row>
+                        <RadioGroup row value={version} onChange={(e) => setVersion(e.target.value)}>
                             <FormControlLabel value={1} control={<Radio />} label="Version 1" />
                             <FormControlLabel value={2} control={<Radio />} label="Version 2" />
                         </RadioGroup>
                     </FormControl> 
 
-                    <TextField variant="outlined" size="small"  fullWidth label="Input" placeholder="Enter input" />
+                    <TextField value={input} onChange={(e) => setInput(e.target.value)} variant="outlined" size="small"  fullWidth label="Input" placeholder="Enter input" />
 
-                    {item.modules.map((module, index) => (
-                        <Stack key={index}>
+                    {item.modules.map((module, moduleIndex) => (
+                        <Stack key={moduleIndex}>
                             <h4>{module.name}</h4>
                             {Object.keys(module.args).length > 0 && (
                                 <Stack direction={"row"} spacing={1}>
-                                    {Object.keys(module.args).map((arg, index) => (
+                                    {Object.keys(module.args).map((arg, argIndex) => (
                                     <TextField
-                                        key={index}
+                                        key={argIndex}
                                         variant="outlined"
                                         size="small"
                                         label={arg}
+                                        value={modules[moduleIndex].args[arg] || ""}
+                                        onChange={(e) => moduleArgumentChange(moduleIndex, arg, e.target.value)}
                                         sx={{ width: `calc( 100% / ${Object.keys(module.args).length} )` }}
                                     />
                                     ))}
@@ -47,7 +107,7 @@ export default function PipeExecutionForm() {
                         </Stack>     
                     ))}
 
-                    <Button variant="contained" sx={{ backgroundColor: "#01579b" }}>Execute</Button>
+                    <Button variant="contained" sx={{ backgroundColor: "#01579b" }} onClick={submit}>Execute</Button>
                 </Stack>
             </Card>
       </div>

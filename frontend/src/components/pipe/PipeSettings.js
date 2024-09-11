@@ -19,6 +19,8 @@ export default function PipeSettings() {
 
     const navigate = useNavigate();
 
+    const isEditButtonDisabled = selectedModules.length === 0;
+
     const handleIsPublicChange = (event) => {
         setIsPublic(event.target.value);
     }
@@ -115,6 +117,7 @@ export default function PipeSettings() {
                         variant="contained"
                         sx={{margin: 1, borderColor: '#01579b', backgroundColor: '#01579b'}}
                         onClick={updatePipe}
+                        disabled={isEditButtonDisabled}
                     >
                         Edit
                     </Button>

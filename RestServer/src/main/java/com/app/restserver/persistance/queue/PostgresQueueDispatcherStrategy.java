@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PostgresQueueDispatcherStrategy implements QueueDispatcherStrategy {
-
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -16,9 +15,7 @@ public class PostgresQueueDispatcherStrategy implements QueueDispatcherStrategy 
     }
 
     public void put(String job) {
-        jdbcTemplate.update(
-                "insert into mq.queue(message) values (?)",
-                job
-        );
+        String sql = "insert into mq.queue(message) values (?)";
+        jdbcTemplate.update(sql, job);
     }
 }
