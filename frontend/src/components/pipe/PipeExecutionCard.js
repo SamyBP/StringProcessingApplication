@@ -1,18 +1,14 @@
 import { Card, Divider, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { useLocation } from "react-router-dom";
+import Header from "../header/Header";
 
 export default function PipeExecutionCard() {
     const location = useLocation();
     const {item} = location.state;
 
     return (
-        <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            alignItems: 'flex-start', 
-            minHeight: '100vh',
-            paddingTop: '20px'
-          }}>
+        <div style={{ display:'flex', justifyContent:'center', alignItems:'center', flexDirection:"column" }}>
+            <Header />
             <Card sx={{ width: 4/5, margin: 2, border: 'none', boxShadow: 'none' }}>
                 <Stack sx={{ margin: 2 }} spacing={1.5}>
                     

@@ -6,6 +6,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Pipe from './components/pipe/Pipe';
 import PipeExecutionForm from './components/pipe/PipeExecutionForm';
 import PipeExecutionCard from './components/pipe/PipeExecutionCard';
+import PipeSettings from './components/pipe/PipeSettings';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path='/pipe' element= { <Pipe /> } />
         <Route path='/execute' element= { <PipeExecutionForm />} />
         <Route path='/execution-details' element= { <PipeExecutionCard /> } />
+        <Route path='/pipe-settings' element= { <PipeSettings /> } />
       </Routes>
     </BrowserRouter>
   );

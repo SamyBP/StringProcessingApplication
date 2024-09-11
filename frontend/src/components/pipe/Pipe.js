@@ -2,7 +2,8 @@ import { Button, Card, Divider, IconButton, Paper, Stack, Table, TableBody, Tabl
 import { useLocation, useNavigate } from "react-router-dom";
 import Chip from "@mui/material/Chip";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow"
-import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
+import SettingsIcon from '@mui/icons-material/Settings';
+import Header from "../header/Header";
 
 export default function Pipe() {
 
@@ -17,14 +18,14 @@ export default function Pipe() {
         navigate('/execute', {state: {item: item} });
     }
 
+    const goToSettings = (event) => {
+        event.preventDefault();
+        navigate('/pipe-settings', {state: {item: item} });
+    }
+
     return (
-        <div style={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            alignItems: 'flex-start', 
-            minHeight: '100vh',
-            paddingTop: '20px'
-          }}>
+        <div style={{ display:'flex', justifyContent:'center', alignItems:'center', flexDirection:"column" }}>
+            <Header />
             <Card sx={{ width: 4/5, margin: 2, border: 'none', boxShadow: 'none' }}>
               <Stack sx={{ margin: 2 }} spacing={1.5}>
                 <Stack direction={"row"} sx={{ display: "flex", alignItems: "center" }} spacing={2}>
@@ -39,8 +40,8 @@ export default function Pipe() {
                                 Run
                             </Button>
                             { item.ownerUsername === localStorage.getItem('username') && 
-                                <IconButton aria-label="settings">
-                                    <MoreVertRoundedIcon sx={{ color: '#01579b' }} />
+                                <IconButton aria-label="settings" onClick={goToSettings}>
+                                    <SettingsIcon sx={{ color: '#01579b' }} />
                                 </IconButton> }
                         </Stack>
                     </Stack>

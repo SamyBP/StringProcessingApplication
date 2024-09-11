@@ -2,7 +2,7 @@ import React from 'react';
 import MuiDrawer from "@mui/material/Drawer"
 import drawerClasses from '@mui/material/Drawer';
 import { styled }  from '@mui/material/styles';
-import { Avatar, Button, Divider, Stack, Typography } from '@mui/material';
+import { Avatar, Divider, Stack, Typography } from '@mui/material';
 import {List, ListItem, ListItemText, ListItemButton} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -22,11 +22,6 @@ const Drawer = styled(MuiDrawer)({
 const SideMenu = ({ userPipes }) => {
 
     const navigate = useNavigate();
-
-    const logOut = (e) => {
-        localStorage.clear();
-        navigate("/");
-    }
 
     return (
         <Drawer
@@ -70,8 +65,6 @@ const SideMenu = ({ userPipes }) => {
                     ))}
                 </List>
             </ Stack>
-
-            <Button variant='contained' sx={{ backgroundColor: "#01579b", margin:1 }} onClick={logOut}>Log out</Button>        
 
         </Drawer>
     );
