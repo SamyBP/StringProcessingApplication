@@ -2,6 +2,7 @@ import { Button, Stack, FormControl, FormControlLabel, RadioGroup, Radio, TextFi
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add"
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 
 const modules = [
@@ -68,6 +69,9 @@ export default function PipeCreationCard() {
         .catch(response => {
             response.json().then(json => {
                 console.log(json.message);
+                toast.error(json.message, {
+                    position: 'bottom-right',
+                });
             }) 
         })
 
@@ -112,6 +116,7 @@ export default function PipeCreationCard() {
                     />
                 ))}
             </Stack>
+            <ToastContainer />
         </Stack>
     );
 }

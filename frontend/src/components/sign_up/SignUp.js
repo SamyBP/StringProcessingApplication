@@ -1,6 +1,7 @@
 import { Button, TextField, Typography,Stack, Card} from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
 
 function SignUp() {
 
@@ -35,6 +36,9 @@ function SignUp() {
       console.log(response.status);
       response.json().then(json => {
         console.log(json.message);
+        toast.error(json.message, {
+          position: 'bottom-right',
+        });
       }) 
     })   
   }
@@ -57,6 +61,7 @@ function SignUp() {
 
           </Stack>      
         </Card>
+        <ToastContainer />
       </div>
   );
 }

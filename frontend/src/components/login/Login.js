@@ -1,7 +1,8 @@
 import { Button, TextField, Typography,Stack, Card} from '@mui/material';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
 
@@ -42,6 +43,9 @@ export default function Login() {
         console.log(response.status);
         response.json().then(json => {
           console.log(json.message);
+          toast.error(json.message, {
+            position: 'bottom-right',
+          });
         }) 
       })   
 
@@ -64,6 +68,7 @@ export default function Login() {
 
             </Stack>
         </Card>
+        <ToastContainer />
       </div>
     );
 }

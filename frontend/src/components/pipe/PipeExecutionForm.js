@@ -2,6 +2,7 @@ import { Button, Card, Divider, FormControl, FormControlLabel, Radio, RadioGroup
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../header/Header";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function PipeExecutionForm() {    
     
@@ -21,7 +22,11 @@ export default function PipeExecutionForm() {
 
     const moduleArgumentChange = (index, argumentName, value) => {
         const temp = [...modules];
-        temp[index].args[argumentName] = value;
+        if (argumentName === 'start' || argumentName === 'end') {
+          temp[index].args[argumentName] = parseInt(value);  
+        } else {
+          temp[index].args[argumentName] = value;
+        }
         setModules(temp);
     }
 
@@ -50,13 +55,13 @@ export default function PipeExecutionForm() {
             console.log("Triggered execution succefully!");
             navigate('/pipe', {state: {item: item}});
           })
-          .then(response => {
-            navigate('/dashboard');
-          })
           .catch(response => {
             console.log(response.status);
             response.json().then(json => {
               console.log(json.message);
+              toast.error(json.message, {
+                position: 'bottom-right',
+              });
             }) 
           })   
 
@@ -110,6 +115,7 @@ export default function PipeExecutionForm() {
                     <Button variant="contained" sx={{ backgroundColor: "#01579b" }} onClick={submit}>Execute</Button>
                 </Stack>
             </Card>
+            <ToastContainer />
       </div>
     );
 }

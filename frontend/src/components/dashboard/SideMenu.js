@@ -4,7 +4,7 @@ import drawerClasses from '@mui/material/Drawer';
 import { styled }  from '@mui/material/styles';
 import { Avatar, Divider, Stack, Typography } from '@mui/material';
 import {List, ListItem, ListItemText, ListItemButton} from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 300;
 
@@ -20,8 +20,6 @@ const Drawer = styled(MuiDrawer)({
 });
 
 const SideMenu = ({ userPipes }) => {
-
-    const navigate = useNavigate();
 
     return (
         <Drawer

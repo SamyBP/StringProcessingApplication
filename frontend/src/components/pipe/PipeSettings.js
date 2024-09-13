@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../header/Header";
 import { Button, Card, Chip, Divider, FormControl, FormControlLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 const modules = [
     { id: 1, name: "SUBSTRING" },
@@ -67,6 +68,9 @@ export default function PipeSettings() {
         .catch(response => {
             response.json().then(json => {
                 console.log(json.message);
+                toast.error(json.message, {
+                    position: 'bottom-right',
+                });
             }) 
         })
 
@@ -93,6 +97,9 @@ export default function PipeSettings() {
         .catch(response => {
             response.json().then(json => {
                 console.log(json.message);
+                toast.error(json.message, {
+                    position: 'bottom-right',
+                });
             }) 
         })
     }
@@ -211,6 +218,7 @@ export default function PipeSettings() {
                     </Button>
                 </div>
             </Card>
+            <ToastContainer />
         </div>
     );
 
