@@ -21,7 +21,7 @@ const PublicPipeCard = ({ publicPipes }) => {
                 <TableBody>
                     { publicPipes.map( (item, index) => (
                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': {backgroundColor:'rgba(0, 0, 0, 0.04)'} }} >
-                            <TableCell component={"th"} scope="row">
+                            <TableCell component={"th"} scope="row" sx={{ height:30 }}>
                                 <Link
                                     to='/pipe'
                                     style={{ textDecoration: "none", color: "black" }}

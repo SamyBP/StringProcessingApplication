@@ -46,7 +46,7 @@ export default function Dashboard() {
                     <Card variant="outlined" sx={{ width: 1/1 }}>
                         <PipeCreationCard />
                     </Card>
-                    <Stack direction={"row"} spacing={2} alignItems={"center"} alignContent={"center"} >
+                    <Stack direction={"row"} spacing={2} alignItems={"stretch"} alignContent={"center"} >
                         <Card variant="outlined" sx={{ width: 1/2 }} >
                             <ExecutionHistoryCard />
                         </Card>
@@ -55,7 +55,7 @@ export default function Dashboard() {
                         </Card>
                     </Stack>
                 </Stack>
-            </Stack>
+        </Stack>
     );
 }
 

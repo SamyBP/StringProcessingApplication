@@ -70,7 +70,7 @@ public class ExecutionService {
     }
 
     public List<ExecutionHistoryResponse> getUsersExecutionHistory(Long userId) {
-        List<Execution> executions = executionRepository.findAllByUserId(userId);
+        List<Execution> executions = executionRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
         return executions.stream()
                 .map(ExecutionHistoryResponse::fromEntity)
                 .toList();
