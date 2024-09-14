@@ -33,7 +33,10 @@ export default function PipeExecutionForm() {
     const submit = (event) => {
         event.preventDefault();
         
-        fetch('http://localhost:8080/api/executions/private', {
+        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+        let executionUrl = baseUrl.concat("/api/executions/private");
+
+        fetch(executionUrl, {
             method: 'POST',
             headers: {
               Accept: 'application/json',

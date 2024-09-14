@@ -43,7 +43,10 @@ export default function PipeCreationCard() {
         console.log(pipeName);
         console.log(selectedModules.map(module => module.id));
 
-        fetch('http://localhost:8080/api/pipes', {
+        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+        let pipeUrl = baseUrl.concat("/api/pipes");
+
+        fetch(pipeUrl, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

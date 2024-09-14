@@ -10,7 +10,9 @@ export default function Dashboard() {
     const [pipes, setPipes] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/pipes', {
+        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+        let pipeUrl = baseUrl.concat("/api/pipes");
+        fetch(pipeUrl, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

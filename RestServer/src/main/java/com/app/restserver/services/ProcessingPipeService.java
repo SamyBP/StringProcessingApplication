@@ -58,7 +58,7 @@ public class ProcessingPipeService {
     @Transactional
     public PipeResponse updatePipeDefinition(PipeUpdateRequest pipeUpdateRequest, Long userId) {
         checkOwnershipForPipe(userId, pipeUpdateRequest.getPipeId());
-        pipeRepository.updatePipeDefinition(pipeUpdateRequest.getPipeId(), pipeUpdateRequest.isPublic(), pipeUpdateRequest.getModuleIds());
+        pipeRepository.updatePipeDefinition(pipeUpdateRequest.getPipeId(), pipeUpdateRequest.getIsPublic(), pipeUpdateRequest.getModuleIds());
         Pipe pipe = pipeRepository.findByIdIfExists(pipeUpdateRequest.getPipeId());
         return PipeResponse.fromEntity(pipe);
     }

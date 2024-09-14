@@ -51,6 +51,7 @@ public class ProcessingPipeController {
     @Authenticated
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity<?> updatePipeDefinition(@RequestBody PipeUpdateRequest pipeUpdateRequest, @FromToken Long userId) {
+        System.out.println(pipeUpdateRequest);
         PipeResponse pipe = processingPipeService.updatePipeDefinition(pipeUpdateRequest, userId);
         return new ResponseEntity<>(pipe, HttpStatus.CREATED);
     }

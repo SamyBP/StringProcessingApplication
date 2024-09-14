@@ -42,7 +42,10 @@ export default function PipeSettings() {
         console.log(isPublic);
         console.log(selectedModules);
 
-        fetch('http://localhost:8080/api/pipes', {
+        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+        let pipeUrl = baseUrl.concat("/api/pipes");
+
+        fetch(pipeUrl, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -79,7 +82,10 @@ export default function PipeSettings() {
     const deletePipe = (event) => {
         event.preventDefault();
 
-        fetch(`http://localhost:8080/api/pipes/${item.id}`, {
+        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+        let deletePipeUrl = baseUrl.concat(`/api/pipes/${item.id}`);
+
+        fetch(deletePipeUrl, {
             method: 'DELETE',
             headers: {
                 Accept: 'application/json',

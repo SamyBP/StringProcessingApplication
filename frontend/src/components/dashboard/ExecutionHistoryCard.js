@@ -32,7 +32,9 @@ export default function ExecutionHistoryCard() {
     const [executions, setExecutions] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/executions', {
+        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+        let executionUrl = baseUrl.concat("/api/executions");
+        fetch(executionUrl, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

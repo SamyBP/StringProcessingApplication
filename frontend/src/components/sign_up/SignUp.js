@@ -13,7 +13,10 @@ function SignUp() {
   const register = (e) => {
     e.preventDefault();
 
-    fetch('http://localhost:8080/api/auth/register', {
+    let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+    let signUpUrl = baseUrl.concat("/api/auth/register");
+
+    fetch(signUpUrl, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

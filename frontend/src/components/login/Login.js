@@ -13,7 +13,10 @@ export default function Login() {
     const login = (e) => {
       e.preventDefault();
       
-      fetch('http://localhost:8080/api/auth/login', {
+      let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+      let loginUrl = baseUrl.concat("/api/auth/login");
+
+      fetch(loginUrl, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

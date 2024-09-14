@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class PipeUpdateRequest {
     private Long pipeId;
-    private boolean isPublic;
+    private Boolean isPublic;
     @NotEmpty
     private List<Long> moduleIds;
 }
