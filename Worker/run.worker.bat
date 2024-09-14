@@ -1,1 +1,1 @@
-python worker.py
+if %1 == 1 (python worker.py) else (python worker_v2.py)
