@@ -11,8 +11,6 @@ export default function Pipe() {
     const location = useLocation();
     const { item } = location.state;
 
-    console.log(item);
-
     const runPipe = (event) => {
         event.preventDefault();
         navigate('/execute', {state: {item: item} });

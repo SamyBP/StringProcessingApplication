@@ -2,7 +2,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../header/Header";
 import { Button, Card, Chip, Divider, FormControl, FormControlLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { PipeService } from "../../services/pipe.service";
+import { Handler } from "../../services/request.util";
 
 const modules = [
     { id: 1, name: "SUBSTRING" },
@@ -39,75 +41,20 @@ export default function PipeSettings() {
 
     const updatePipe = (event) => {
         event.preventDefault();
-        console.log(isPublic);
-        console.log(selectedModules);
-
-        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-        let pipeUrl = baseUrl.concat("/api/pipes");
-
-        fetch(pipeUrl, {
-            method: 'PUT',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'token': localStorage.getItem('token')
-              },
-              body: JSON.stringify({
-                pipeId: item.id,
-                isPublic: isPublic,
-                moduleIds: selectedModules.map(module => module.id)
-              })  
+        
+        PipeService.update(item.id, isPublic, selectedModules).then(pipe => {
+            Handler.handleSuccess("Updated pipe!");
+            navigate("/pipe", {state: {item: pipe}});
         })
-        .then(response => {
-            if (response.status !== 201)
-                return Promise.reject(response)
-
-            return response.json();
-        })
-        .then(response => {
-            console.log("Updated pipe!");
-            navigate('/pipe', {state: {item: response} } )    
-        })
-        .catch(response => {
-            response.json().then(json => {
-                console.log(json.message);
-                toast.error(json.message, {
-                    position: 'bottom-right',
-                });
-            }) 
+        .catch(error => {
+            Handler.handleError(error);
         })
 
     }
 
     const deletePipe = (event) => {
         event.preventDefault();
-
-        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-        let deletePipeUrl = baseUrl.concat(`/api/pipes/${item.id}`);
-
-        fetch(deletePipeUrl, {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'token': localStorage.getItem('token')
-              },
-        })
-        .then(response => {
-            if (response.status !== 204)
-                return Promise.reject(response)
-
-            console.log("Deleted pipe!");
-            navigate('/dashboard');
-        })
-        .catch(response => {
-            response.json().then(json => {
-                console.log(json.message);
-                toast.error(json.message, {
-                    position: 'bottom-right',
-                });
-            }) 
-        })
+        PipeService.remove(item.id);
     }
 
     return (

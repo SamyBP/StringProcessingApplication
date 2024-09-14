@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import PendingIcon from '@mui/icons-material/Pending';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
+import { ExecutionService } from "../../services/execution.service";
+import { Handler } from "../../services/request.util";
 
 function StatusImage(props) {
     let status = props.status;
@@ -32,26 +34,11 @@ export default function ExecutionHistoryCard() {
     const [executions, setExecutions] = useState([]);
 
     useEffect(() => {
-        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-        let executionUrl = baseUrl.concat("/api/executions");
-        fetch(executionUrl, {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'token': localStorage.getItem('token')
-            },
+        ExecutionService.getExecutionHistory().then(executions => {
+            setExecutions(executions);    
         })
-        .then(response => {
-            if (response.status !== 200)
-                return Promise.reject(response);
-            return response.json();;
-        })
-        .then(response => {
-            setExecutions(response);
-        })
-        .catch(response => {
-            console.log(response.status);
+        .catch(error => {
+            Handler.handleError(error);
         })
     },[])
 

@@ -2,7 +2,9 @@ import { Button, Stack, FormControl, FormControlLabel, RadioGroup, Radio, TextFi
 import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add"
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { PipeService } from "../../services/pipe.service";
+import { Handler } from "../../services/request.util";
 
 
 const modules = [
@@ -37,47 +39,15 @@ export default function PipeCreationCard() {
         setIsPublic(event.target.value);
     }
 
-    const submitForm = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(isPublic);
-        console.log(pipeName);
-        console.log(selectedModules.map(module => module.id));
-
-        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-        let pipeUrl = baseUrl.concat("/api/pipes");
-
-        fetch(pipeUrl, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'token': localStorage.getItem('token')
-              },
-              body: JSON.stringify({
-                name: pipeName,
-                isPublic: isPublic,
-                moduleIds: selectedModules.map(module => module.id)
-              })  
+        PipeService.createPipe(pipeName, isPublic, selectedModules).then(pipe => {
+           Handler.handleSuccess("Created new pipe!");
+           navigate("/pipe", {state: {item: pipe}});     
         })
-        .then(response => {
-            if (response.status !== 201)
-                return Promise.reject(response)
-
-            return response.json();
+        .catch(error => {
+            Handler.handleError(error);
         })
-        .then(response => {
-            console.log("Created a pipe!");
-            navigate('/pipe', {state: {item: response} } )    
-        })
-        .catch(response => {
-            response.json().then(json => {
-                console.log(json.message);
-                toast.error(json.message, {
-                    position: 'bottom-right',
-                });
-            }) 
-        })
-
     }
      
     return (
@@ -85,7 +55,7 @@ export default function PipeCreationCard() {
             
             <Stack direction={"row"} sx={{ display:"flex", alignItems: "center" }} spacing={ 1 }>
                 <h2>Create a new pipe for {localStorage.getItem("username")} </h2>
-                <Fab sx={{backgroundColor: "#01579b", color: "white" }} aria-label="add" size="small" disabled={ isAddDisabled } onClick={submitForm}>
+                <Fab sx={{backgroundColor: "#01579b", color: "white" }} aria-label="add" size="small" disabled={ isAddDisabled } onClick={handleSubmit}>
                     <AddIcon />
                 </Fab>
             </Stack>

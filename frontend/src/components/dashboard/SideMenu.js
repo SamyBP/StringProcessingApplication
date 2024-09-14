@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MuiDrawer from "@mui/material/Drawer"
 import drawerClasses from '@mui/material/Drawer';
 import { styled }  from '@mui/material/styles';
 import { Avatar, Divider, Stack, Typography } from '@mui/material';
 import {List, ListItem, ListItemText, ListItemButton} from "@mui/material";
 import { Link } from "react-router-dom";
+import { PipeService } from '../../services/pipe.service';
+import { Handler } from '../../services/request.util';
 
 const drawerWidth = 300;
 
@@ -19,7 +21,18 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
-const SideMenu = ({ userPipes }) => {
+export default function SideMenu() {
+
+    const [userOwnedPipes, setUserOwnedPipes] = useState([]);
+
+    useEffect(() => {
+        PipeService.getAllOwnedByUser().then(userOwnedPipes => {
+            setUserOwnedPipes(userOwnedPipes);
+        })
+        .catch(error => {
+            Handler.handleError(error);
+        })
+    }, []);
 
     return (
         <Drawer
@@ -48,7 +61,7 @@ const SideMenu = ({ userPipes }) => {
 
             <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
                 <List dense>
-                    {userPipes.map((item, index) => (
+                    {userOwnedPipes.map((item, index) => (
                         <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton>
                                 <Link 
@@ -67,5 +80,3 @@ const SideMenu = ({ userPipes }) => {
         </Drawer>
     );
 }
-
-export default SideMenu;

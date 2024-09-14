@@ -1,58 +1,19 @@
 import { Button, TextField, Typography,Stack, Card} from '@mui/material';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AuthService } from '../../services/auth.service';
 
 export default function Login() {
 
-    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const login = (e) => {
-      e.preventDefault();
-      
-      let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-      let loginUrl = baseUrl.concat("/api/auth/login");
-
-      fetch(loginUrl, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })  
-      })
-      .then(response => {
-        if (response.status !== 200) {
-          return Promise.reject(response);
-        }
-        
-        return response.json();
-      })
-      .then(response => {
-        console.log(response.expiresIn);
-        console.log(response.token);
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('username', response.username);
-        localStorage.setItem('email', email);
-        navigate('/dashboard');
-      })
-      .catch(response => {
-        console.log(response.status);
-        response.json().then(json => {
-          console.log(json.message);
-          toast.error(json.message, {
-            position: 'bottom-right',
-          });
-        }) 
-      })   
-
-    }
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      AuthService.login(email, password);
+    }    
 
     return (
         <div style={{ display:'flex', justifyContent:'center', alignItems:'center' }}>
@@ -63,7 +24,7 @@ export default function Login() {
               <TextField value={email} onChange={(e) => setEmail(e.target.value)} label="email" variant='standard' placeholder='email' fullWidth required style={{ marginTop: 5 }} />
               <TextField value={password} onChange={(e) => setPassword(e.target.value)} label="password" variant='standard' placeholder='password' type='password' fullWidth required style={{ marginTop: 5 }} />
             
-              <Button variant='contained' color='primary' style={{ marginTop: 10 }} fullWidth onClick={login}>Login</Button>
+              <Button variant='contained' color='primary' style={{ marginTop: 10 }} fullWidth onClick={handleSubmit}>Login</Button>
 
               <Typography style={{ marginTop: 10 }}>
                 <Link to="/sign-up">Don't have an account? Sign-up.</Link>

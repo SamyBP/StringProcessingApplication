@@ -2,7 +2,7 @@ import { Card, Divider, Paper, Stack, Table, TableBody, TableCell, TableContaine
 import { useLocation } from "react-router-dom";
 import Header from "../header/Header";
 
-export default function PipeExecutionCard() {
+export default function PipeExecutionHistoryDetailsCard() {
     const location = useLocation();
     const {item} = location.state;
 

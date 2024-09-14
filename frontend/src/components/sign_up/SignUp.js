@@ -1,50 +1,17 @@
 import { Button, TextField, Typography,Stack, Card} from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+import { AuthService } from '../../services/auth.service';
 
 function SignUp() {
-
-  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const register = (e) => {
     e.preventDefault();
-
-    let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-    let signUpUrl = baseUrl.concat("/api/auth/register");
-    console.log(signUpUrl);
-
-    fetch(signUpUrl, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password
-      })  
-    })
-    .then(response => {
-      if (response.status !== 201) {
-        return Promise.reject(response);
-      }
-      console.log("Succesfully signed up!");
-      navigate("/login");
-    })
-    .catch(response => {
-      console.log(response.status);
-      response.json().then(json => {
-        console.log(json.message);
-        toast.error(json.message, {
-          position: 'bottom-right',
-        });
-      }) 
-    })   
+    AuthService.register(username, email, password);
   }
 
   return (    

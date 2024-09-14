@@ -1,12 +1,12 @@
 import { Button, Card, Divider, FormControl, FormControlLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Header from "../header/Header";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import { ExecutionService } from "../../services/execution.service";
 
 export default function PipeExecutionForm() {    
     
-    const navigate = useNavigate();
     const location = useLocation();
     const { item } = location.state;
 
@@ -30,46 +30,9 @@ export default function PipeExecutionForm() {
         setModules(temp);
     }
 
-    const submit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        
-        let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
-        let executionUrl = baseUrl.concat("/api/executions/private");
-
-        fetch(executionUrl, {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              'token': localStorage.getItem('token')
-            },
-            body: JSON.stringify({
-              input: input,
-              pipeId: item.id,
-              version: version,
-              modules: modules              
-            })  
-          })
-          .then(response => {
-            if (response.status !== 202) {
-              return Promise.reject(response);
-            }
-            
-            console.log("Triggered execution succefully!");
-            navigate('/pipe', {state: {item: item}});
-          })
-          .catch(response => {
-            console.log(response.status);
-            response.json().then(json => {
-              console.log(json.message);
-              toast.error(json.message, {
-                position: 'bottom-right',
-              });
-            }) 
-          })   
-
-
-
+        ExecutionService.triggerExecution(input, item.id, version, modules);
     }
 
     return (
@@ -115,7 +78,7 @@ export default function PipeExecutionForm() {
                         </Stack>     
                     ))}
 
-                    <Button variant="contained" sx={{ backgroundColor: "#01579b" }} onClick={submit}>Execute</Button>
+                    <Button variant="contained" sx={{ backgroundColor: "#01579b" }} onClick={handleSubmit}>Execute</Button>
                 </Stack>
             </Card>
             <ToastContainer />

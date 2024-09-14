@@ -1,17 +1,15 @@
 import { AppBar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
-import { useNavigate } from "react-router-dom";
+import { AuthService } from "../../services/auth.service";
 
 export default function Header() {
-    const navigate = useNavigate();
 
-    const logOut = (e) => {
-        localStorage.clear();
-        navigate("/");
+    const handleLogout = (e) => {
+        AuthService.logout();
     }
 
     const goToDashboard = (e) => {
-        navigate("/dashboard");
+        window.location.href = "/dashboard";
     }
 
     return(
@@ -31,7 +29,7 @@ export default function Header() {
                         String Processing Application
                     </Typography>
                 
-                    <Button color="inherit" onClick={logOut}>Logout</Button>
+                    <Button color="inherit" onClick={handleLogout}>Logout</Button>
                 </Toolbar>
             </AppBar>
         </Box>
