@@ -19,6 +19,7 @@ RestServer/.env
 
 #Worker
 Worker/.idea
+Worker/.venv
 Worker/.env
 
 .idea

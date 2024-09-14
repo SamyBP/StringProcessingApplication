@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_FILE=Nginx/nginx.conf
+CONFIG_FILE=LoadBalancer/nginx.conf
 
 echo "upstream backend {" > $CONFIG_FILE
 

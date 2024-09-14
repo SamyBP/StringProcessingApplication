@@ -1,25 +1,14 @@
 
 
 services:
-  client-1:
+  client:
     build: ./Client
     image: "client"
-    container_name: "client-1"
+    container_name: "client"
     ports:
       - "8002:8000"
     environment:
-      - STRING_PROCESSING_ENDPOINT_APP=http://nginx:80/api/v1/jobs
-    networks:
-      - app
-
-  client-2:
-    build: ./Client
-    image: "client"
-    container_name: "client-2"
-    ports:
-      - "8003:8000"
-    environment:
-      - STRING_PROCESSING_ENDPOINT_APP=http://nginx:80/api/v2/jobs
+      - STRING_PROCESSING_ENDPOINT_APP=http://nginx:80/api/executions/public
     networks:
       - app
 
@@ -37,16 +26,16 @@ services:
       - RABBITMQ_VHOST=app.vhost
     healthcheck:
       test: rabbitmq-diagnostics -q ping
-      interval: 30s
-      timeout: 30s
-      retries: 3
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
     networks:
       - app
 
-  postgres:
+  postgres-queue:
     image: "library/postgres"
-    container_name: "postgres"
+    container_name: "postgres.queue"
     ports:
       - "5433:5432"
     environment:
@@ -54,9 +43,8 @@ services:
       - POSTGRES_USER=mq_admin
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=message_queue_db
-      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
-      - ./Persistence/PostgreSQL:/docker-entrypoint-initdb.d
+      - ./Persistence/Queues/PostgreSQL:/docker-entrypoint-initdb.d
     healthcheck:
       test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
       interval: 10s
@@ -64,6 +52,27 @@ services:
       retries: 5
     networks:
       - app
+
+  core-database:
+    image: "library/postgres"
+    container_name: "string.core.database"
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./Persistence/Core:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_HOST=core-database
+      - POSTGRES_USER=stc_admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=string_core_db
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app
+
 
   worker-v1:
     build:
@@ -90,14 +99,14 @@ services:
     environment:
       - POSTGRES_DATABASE_USER=mq_admin
       - POSTGRES_DATABASE_PASSWORD=admin
-      - POSTGRES_DATABASE_HOST=postgres
+      - POSTGRES_DATABASE_HOST=postgres.queue
       - POSTGRES_DATABASE_PORT=5432
       - POSTGRES_DATABASE=message_queue_db
     deploy:
       mode: replicated
       replicas: ${WORKER_V2_REPLICAS_COUNT}
     depends_on:
-      postgres:
+      postgres-queue:
           condition: service_healthy
     networks:
       - app
@@ -115,23 +124,35 @@ services:
       - SPRING_RABBITMQ_USERNAME=app
       - SPRING_RABBITMQ_PASSWORD=app
       - SPRING_RABBITMQ_PORT=5672
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/message_queue_db
-      - SPRING_DATASOURCE_USERNAME=mq_admin
-      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_DATASOURCE_QUEUE_URL=jdbc:postgresql://postgres.queue:5432/message_queue_db
+      - SPRING_DATASOURCE_QUEUE_USERNAME=mq_admin
+      - SPRING_DATASOURCE_QUEUE_PASSWORD=admin
+      - SPRING_DATASOURCE_CORE_URL=jdbc:postgresql://string.core.database:5432/string_core_db
+      - SPRING_DATASOURCE_CORE_USERNAME=stc_admin
+      - SPRING_DATASOURCE_CORE_PASSWORD=admin
+      - AUTH_JWT_PRIVATE_KEY=bXBTUmdhV2IyZDlOMzUxaE5NVjNJY3IwazRwaW5meHk=
+      - AUTH_JWT_VALID_PERIOD=86400000
+      - EXECUTION_CALLBACK_URL=http://nginx:80/api/executions/callback
     deploy:
       mode: replicated
       replicas: ${SERVER_REPLICAS_COUNT}
+    depends_on:
+       core-database:
+          condition: service_healthy
     networks:
       - app
 
   nginx:
-    build: LoadBalancer
+    build: ./LoadBalancer
     ports:
       - "80:80"
     image: "nginx"
     container_name: "nginx"
     volumes:
-      - ./Nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./LoadBalancer/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      server:
+        condition: service_started
     networks:
       - app
 

@@ -175,7 +175,7 @@ ALTER SEQUENCE public.pipe_id_seq OWNED BY public.pipe.id;
 
 
 --
--- Name: pipe_module; Type: TABLE; Schema: public; Owner: postgres
+-- Name: pipe_module; Type: TABLE; Schema: public; Owner: stc_admin
 --
 
 CREATE TABLE public.pipe_module (
@@ -185,10 +185,10 @@ CREATE TABLE public.pipe_module (
 );
 
 
-ALTER TABLE public.pipe_module OWNER TO postgres;
+ALTER TABLE public.pipe_module OWNER TO stc_admin;
 
 --
--- Name: pipe_module_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: pipe_module_id_seq; Type: SEQUENCE; Schema: public; Owner: stc_admin
 --
 
 CREATE SEQUENCE public.pipe_module_id_seq
@@ -200,10 +200,10 @@ CREATE SEQUENCE public.pipe_module_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pipe_module_id_seq OWNER TO postgres;
+ALTER TABLE public.pipe_module_id_seq OWNER TO stc_admin;
 
 --
--- Name: pipe_module_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: pipe_module_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: stc_admin
 --
 
 ALTER SEQUENCE public.pipe_module_id_seq OWNED BY public.pipe_module.id;
@@ -276,7 +276,7 @@ ALTER TABLE ONLY public.pipe ALTER COLUMN id SET DEFAULT nextval('public.pipe_id
 
 
 --
--- Name: pipe_module id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: pipe_module id; Type: DEFAULT; Schema: public; Owner: stc_admin
 --
 
 ALTER TABLE ONLY public.pipe_module ALTER COLUMN id SET DEFAULT nextval('public.pipe_module_id_seq'::regclass);
@@ -287,6 +287,100 @@ ALTER TABLE ONLY public.pipe_module ALTER COLUMN id SET DEFAULT nextval('public.
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: execution; Type: TABLE DATA; Schema: public; Owner: stc_admin
+--
+
+COPY public.execution (id, user_id, pipe_id, status, result, input, created_at, started_at, ended_at, version) FROM stdin;
+\.
+
+
+--
+-- Data for Name: execution_module; Type: TABLE DATA; Schema: public; Owner: stc_admin
+--
+
+COPY public.execution_module (id, execution_id, args, module_name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: module; Type: TABLE DATA; Schema: public; Owner: stc_admin
+--
+
+COPY public.module (id, name, args) FROM stdin;
+1	SUBSTRING	{"start": 0, "end": 0}
+2	TRIM	{"character": ""}
+3	UPPER	{}
+4	LOWER	{}
+\.
+
+
+--
+-- Data for Name: pipe; Type: TABLE DATA; Schema: public; Owner: stc_admin
+--
+
+COPY public.pipe (id, user_id, name, is_public, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: pipe_module; Type: TABLE DATA; Schema: public; Owner: stc_admin
+--
+
+COPY public.pipe_module (id, pipe_id, module_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: stc_admin
+--
+
+COPY public.users (id, email, password, is_active, last_login, username) FROM stdin;
+\.
+
+
+--
+-- Name: execution_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stc_admin
+--
+
+SELECT pg_catalog.setval('public.execution_id_seq', 1, false);
+
+
+--
+-- Name: execution_module_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stc_admin
+--
+
+SELECT pg_catalog.setval('public.execution_module_id_seq', 1, false);
+
+
+--
+-- Name: module_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stc_admin
+--
+
+SELECT pg_catalog.setval('public.module_id_seq', 4, true);
+
+
+--
+-- Name: pipe_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stc_admin
+--
+
+SELECT pg_catalog.setval('public.pipe_id_seq', 1, false);
+
+
+--
+-- Name: pipe_module_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stc_admin
+--
+
+SELECT pg_catalog.setval('public.pipe_module_id_seq', 1, false);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: stc_admin
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 1, false);
 
 
 --
@@ -314,7 +408,7 @@ ALTER TABLE ONLY public.module
 
 
 --
--- Name: pipe_module pipe_module_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pipe_module pipe_module_type_pkey; Type: CONSTRAINT; Schema: public; Owner: stc_admin
 --
 
 ALTER TABLE ONLY public.pipe_module
@@ -374,14 +468,14 @@ CREATE INDEX pipe_userid_fkey ON public.pipe USING btree (user_id);
 
 
 --
--- Name: pipemoduletype_moduletypeid_fkey; Type: INDEX; Schema: public; Owner: postgres
+-- Name: pipemoduletype_moduletypeid_fkey; Type: INDEX; Schema: public; Owner: stc_admin
 --
 
 CREATE INDEX pipemoduletype_moduletypeid_fkey ON public.pipe_module USING btree (module_id);
 
 
 --
--- Name: pipemoduletype_pipeid_fkey; Type: INDEX; Schema: public; Owner: postgres
+-- Name: pipemoduletype_pipeid_fkey; Type: INDEX; Schema: public; Owner: stc_admin
 --
 
 CREATE INDEX pipemoduletype_pipeid_fkey ON public.pipe_module USING btree (pipe_id);
@@ -427,7 +521,7 @@ ALTER TABLE ONLY public.pipe
 
 
 --
--- Name: pipe_module fk_pipemodule_module; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pipe_module fk_pipemodule_module; Type: FK CONSTRAINT; Schema: public; Owner: stc_admin
 --
 
 ALTER TABLE ONLY public.pipe_module
@@ -435,7 +529,7 @@ ALTER TABLE ONLY public.pipe_module
 
 
 --
--- Name: pipe_module fk_pipemodule_pipe; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: pipe_module fk_pipemodule_pipe; Type: FK CONSTRAINT; Schema: public; Owner: stc_admin
 --
 
 ALTER TABLE ONLY public.pipe_module

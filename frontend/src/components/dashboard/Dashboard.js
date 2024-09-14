@@ -12,6 +12,7 @@ export default function Dashboard() {
     useEffect(() => {
         let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
         let pipeUrl = baseUrl.concat("/api/pipes");
+        console.log(pipeUrl);
         fetch(pipeUrl, {
             method: 'GET',
             headers: {

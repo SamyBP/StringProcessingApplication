@@ -21,6 +21,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +59,14 @@ public class BeanConfiguration {
 
     @Bean
     public CachingConnectionFactory rabbitConnectionFactory() {
-        return new CachingConnectionFactory();
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        connectionFactory.setHost(environment.getProperty("spring.rabbitmq.host"));
+        connectionFactory.setVirtualHost(environment.getProperty("spring.rabbitmq.virtual-host"));
+        connectionFactory.setUsername(environment.getProperty("spring.rabbitmq.username"));
+        connectionFactory.setPassword(environment.getProperty("spring.rabbitmq.password"));
+        connectionFactory.setPort(Integer.parseInt(environment.getProperty("spring.rabbitmq.port")));
+
+        return connectionFactory;
     }
 
 

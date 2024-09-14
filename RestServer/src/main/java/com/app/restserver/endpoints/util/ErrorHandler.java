@@ -67,8 +67,13 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public void handle() {
+    public ResponseEntity<ErrorResponse> handle(EntityNotFoundException e, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .path(request.getRequestURI())
+                .message(e.getMessage())
+                .status(404)
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NotAuthorizedException.class)

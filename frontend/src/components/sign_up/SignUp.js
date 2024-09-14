@@ -15,6 +15,7 @@ function SignUp() {
 
     let baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
     let signUpUrl = baseUrl.concat("/api/auth/register");
+    console.log(signUpUrl);
 
     fetch(signUpUrl, {
       method: 'POST',
